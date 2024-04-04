@@ -1,1 +1,1 @@
-# mba-data-mining-pj
+# Market Basket Analysis - Data mining project
