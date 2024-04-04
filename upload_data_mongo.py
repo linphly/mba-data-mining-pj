@@ -33,23 +33,7 @@ for i in excel_files:
 
 print("Dữ liệu đã được đẩy vào MongoDB.")
 
-# Truy vấn dữ liệu từ MongoDB
-cursor = collection.find()
 
-# Chuyển kết quả truy vấn thành một danh sách của các bản ghi
-data = list(cursor)
-
-# Chuyển danh sách các bản ghi thành DataFrame
-df = pd.DataFrame(data)
-
-df.drop(columns='_id')
-# df.drop(columns='')
-
-# Thiết lập hiển thị tất cả các cột
-pd.set_option('display.max_columns', None)
-
-# Hiển thị 5 hàng đầu tiên của DataFrame
-print(df.head())
 
 
 
