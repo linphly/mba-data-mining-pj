@@ -1,12 +1,10 @@
-"This file is to delete mongoDB data to remove duplicate"
+"""This file is to delete mongoDB collection if u want"""
 
 from pymongo import MongoClient
 
 client = MongoClient('mongodb://localhost:27017/')
-db = client['data_mining']  # Thay 'mydatabase' bằng tên database của bạn
-collection = db['Basket_Market']  # Thay 'mycollection' bằng tên collection của bạn
+mydb = client['customer_data']
+collection = mydb['marketBasket']
 
-if collection:
-    db.drop_collection(collection)
-else:
-    print('collection not found')
+mydb.drop_collection(collection)
+print('collection deleted')
