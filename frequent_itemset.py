@@ -25,7 +25,7 @@ spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
 spark.conf.set("spark.sql.execution.arrow.pyspark.fallback.enabled", "true")
 
 df = spark.createDataFrame(product_data).withColumnRenamed('Mã sản phẩm', 'basket')
-df.show()
+# df.show()
 
 # frequent itemset - cách 1
 freq_items1 = df.freqItems(['basket'], 0.001)
@@ -36,10 +36,10 @@ model = fp.fit(df)
 freq_items2 = model.freqItemsets
 
 # show result
-freq_items1.show(10, False)
-freq_items2.show(10, False)
+# freq_items1.show(10, False)
+# freq_items2.show(10, False)
 
 
-
-
+# association rule
+model.associationRules.filter(model.associationRules.confidence>0.15).show(20, False)
 
