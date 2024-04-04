@@ -1,3 +1,5 @@
+'this file is to upload data to mongoDB'
+
 
 import pandas as pd
 from pymongo import MongoClient
