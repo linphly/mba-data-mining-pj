@@ -24,14 +24,14 @@ spark = SparkSession.builder.appName("mba").getOrCreate()
 spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
 spark.conf.set("spark.sql.execution.arrow.pyspark.fallback.enabled", "true")
 
-df = spark.createDataFrame(product_data).withColumnRenamed('Mã sản phẩm', 'basket')
+df = spark.createDataFrame(product_data)
 # df.show()
 
 # frequent itemset - cách 1
-freq_items1 = df.freqItems(['basket'], 0.001)
+freq_items1 = df.freqItems(['Mã sản phẩm'], 0.001)
 
 # frequent itemset - cách 2: spark ML - FPGrowth
-fp = FPGrowth(minSupport=0.001, minConfidence=0.001, itemsCol='basket', predictionCol='prediction')
+fp = FPGrowth(minSupport=0.001, minConfidence=0.001, itemsCol='Mã sản phẩm', predictionCol='prediction')
 model = fp.fit(df)
 freq_items2 = model.freqItemsets
 
