@@ -9,9 +9,7 @@ collect = mydb['marketBasket']
 result = collect.find({}, {'Mã sản phẩm': 1, '_id': 0})
 
 # Chuyển kết quả thành một danh sách
-data = list(result)
-
 # Tạo DataFrame từ danh sách
-product_data = pd.DataFrame(data)
+data = pd.DataFrame(list(result))
 
-print(product_data)
+print(data)
