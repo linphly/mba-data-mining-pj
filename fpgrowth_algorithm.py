@@ -1,10 +1,5 @@
-"""This file is just to view data"""
-
 import pandas as pd
 from pymongo import MongoClient
-import warnings
-warnings.filterwarnings('ignore')
-
 
 # Kết nối tới MongoDB
 client = MongoClient('mongodb://localhost:27017/')
@@ -19,10 +14,4 @@ data = list(result)
 # Tạo DataFrame từ danh sách
 product_data = pd.DataFrame(data)
 
-# Thiết lập hiển thị tất cả các cột
-pd.set_option('display.max_columns', None)
-
-# print(product_data)
-
-print(product_data.to_numpy())
-
+print(product_data)

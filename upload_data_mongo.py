@@ -11,8 +11,8 @@ pd.set_option('display.max_columns', None)
 # Kết nối tới MongoDB
 client = MongoClient('mongodb://localhost:27017/')
 mydb = client['customer_data']
-collection = mydb['marketBasket']
-collection.delete_many({})
+collection = mydb['marketBasket']   # gộp chung 4 file vào 1 collection
+collection.delete_many({})      # xóa dữ liệu cũ trong collection
 
 
 # Đọc tập tin Excel và chỉ lấy các cột cần thiết
