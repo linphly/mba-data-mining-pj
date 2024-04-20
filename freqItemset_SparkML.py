@@ -34,13 +34,14 @@ model = fp.fit(df)
 freq_items2 = model.freqItemsets
 
 # show result
-print('cach1')
-freq_items1.show(10, False)
-print('cach 2')
-freq_items2.show(10, False)
-
-
-# association rule
-print('association rule')
-model.associationRules.filter(model.associationRules.confidence>0.15).show(20, False)
+# print('cach1: Pandas frequent itemset')
+# freq_items1.show(10, False)
+print('cach 2: spark ML - FPGrowth')
+print(freq_items2.count())
+# freq_items2.show(100, False)
+#
+#
+# # association rule
+# print('association rule')
+# model.associationRules.filter(model.associationRules.confidence>0.15).show(20, False)
 
