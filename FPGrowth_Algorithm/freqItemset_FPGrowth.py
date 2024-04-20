@@ -13,27 +13,32 @@ result = collect.find({}, {'Mã sản phẩm': 1, '_id': 0})
 data = pd.DataFrame(list(result))
 transactions = data['Mã sản phẩm']
 
+
+def getItemsets(transactions, minimum_support, include_support=False):
+    n = len(transactions)
+    frequent_itemsets = find_frequent_itemsets(transactions, minimum_support=minimum_support*n, include_support=include_support)
+
+    result = []
+    for itemset, support in frequent_itemsets:
+        result.append((itemset, support))
+
+    result = sorted(result, key=lambda i: i[1], reverse=True)   # xắp xếp theo support giảm dần
+
+    # bỏ những itemset chỉ có 1 item
+    # for i_s in result[:]:
+    #     if len(i_s[0]) == 1:
+    #         result.remove(i_s)
+
+    return result
+
+
 # Lấy ra frequent itemset
-miSupp = 0.01
-
 start = time.time()
-n = len(transactions)
-frequent_itemsets = find_frequent_itemsets(transactions, minimum_support=miSupp*n, include_support=True)
 
-result = []
-for itemset, support in frequent_itemsets:
-    result.append((itemset, support))
-
-result = sorted(result, key=lambda i: i[1], reverse=True)   # xắp xếp theo support giảm dần
-
-# bỏ những itemset chỉ có 1 item
-# for i_s in result[:]:
-#     if len(i_s[0]) == 1:
-#         result.remove(i_s)
-
-print(len(result))
-for itemset, support in result:
-    print(str(itemset) + ' ' + str(support))
+freq_itemsets = getItemsets(transactions,minimum_support=0.01,include_support=True)
+print(type(freq_itemsets))
+# for itemset, support in result:
+#     print(str(itemset) + ' ' + str(support))
 
 end = time.time()
 print('Thời gian chạy', str(end - start))
