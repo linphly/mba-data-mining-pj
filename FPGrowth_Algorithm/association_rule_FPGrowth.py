@@ -43,7 +43,6 @@ if __name__ == '__main__':
     rules = generate_association_rules(frequent_itemsets, min_confidence)
     print(len(rules))
 
-
     with open('../asociation_rules.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(['Antecedents', 'Consequents', 'Confidence'])
