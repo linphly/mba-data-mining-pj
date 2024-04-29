@@ -3,6 +3,7 @@ import pandas as pd
 from pymongo import MongoClient
 from FPTree import find_frequent_itemsets
 
+
 # Kết nối tới MongoDB
 client = MongoClient('mongodb://localhost:27017/')
 mydb = client['customer_data']
@@ -14,9 +15,8 @@ data = pd.DataFrame(list(result))
 transactions = data['Mã sản phẩm']
 
 
-def getItemsets(transactions, minimum_support, include_support=False):
-    n = len(transactions)
-    frequent_itemsets = find_frequent_itemsets(transactions, minimum_support=minimum_support*n, include_support=include_support)
+def getItemsets(transactions = transactions, minimum_support = 0, include_support=False):
+    frequent_itemsets = find_frequent_itemsets(transactions, minimum_support=minimum_support, include_support=include_support)
 
     result = []
     for itemset, support in frequent_itemsets:
@@ -32,13 +32,15 @@ def getItemsets(transactions, minimum_support, include_support=False):
     return result
 
 
-# Lấy ra frequent itemset
-start = time.time()
+if __name__ == '__main__':
+    # Lấy ra frequent itemset
+    start = time.time()
 
-freq_itemsets = getItemsets(transactions,minimum_support=0.01,include_support=True)
-print(type(freq_itemsets))
-# for itemset, support in result:
-#     print(str(itemset) + ' ' + str(support))
+    freq_itemsets = getItemsets(minimum_support=0.01, include_support=True)
+    # print(type(freq_itemsets))
 
-end = time.time()
-print('Thời gian chạy', str(end - start))
+    for itemset, support in freq_itemsets:
+        print(str(itemset) + ' ' + str(support))
+
+    end = time.time()
+    print('Thời gian chạy', str(end - start))
