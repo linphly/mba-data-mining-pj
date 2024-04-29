@@ -1,6 +1,6 @@
 # Market Basket Analysis - Data mining project
 
-**Flow**  
+## **Flow**  
 * folder mongo  
 * folder algorithm   
     * freqItemset   
