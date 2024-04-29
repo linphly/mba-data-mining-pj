@@ -55,8 +55,8 @@ if __name__ == '__main__':
         key, value = search_list([product_catalog[i]])
         dict_to_store[key[0]] = value
 
+    # Lưu vào file json
     json_file = json.dumps(dict_to_store)
-
     f = open("recommend_itemsets.json","w")
     f.write(json_file)
 
