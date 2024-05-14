@@ -1,50 +1,53 @@
-"""this file is to upload data to mongoDB"""
+"""
+Đọc dữ liệu từ file excel và đẩy lên MongoDB
+Format:
+    mỗi hàng là một sản phẩm được mua
+    có các cột: ['OrderID', 'ProductID', 'ProductName', 'Type', 'DeliveryDate', 'SalesAgent',
+                'CustomerID','CustomerName','QuantityOrder', 'QuantityDelivery','Price', 'TotalPrice']
+"""
 
 import pandas as pd
-from pymongo import MongoClient
-import warnings
-warnings.filterwarnings('ignore')
-
-pd.set_option('display.max_columns', None)
-
 
 # Kết nối tới MongoDB
+from pymongo import MongoClient
 client = MongoClient('mongodb://localhost:27017/')
 mydb = client['customer_data']
-collection = mydb['marketBasket']   # gộp chung 4 file vào 1 collection
-collection.delete_many({})      # xóa dữ liệu cũ trong collection
+collect = mydb['general_data']
 
 
-# Đọc tập tin Excel và chỉ lấy các cột cần thiết
-excel_files = ['data/MỸ-KHỞI-TK-MÌ-CAO-CẤP-KM-T1.2023.xlsb',
-               'data/MỸ-KHỞI-TỔNG-KẾT-MÌ-ZEPPIN-GÓI-MÌ-LY-ZEPPIN-T2.2023.xlsb',
-               'data/MỸ-KHỞI-BG-TK-PHỞ-ĐỆ-NHẤT-T3.2023.xlsb',
-               'data/MỸ-KHỞI-FORM-TK-PHỞ-ĐỆ-NHẤT-HỦ-TIẾU-KM-T4.2023.xlsb']
-
-
-for i in excel_files:
+# Hàm đọc dữ liệu
+def readFile(pathFile):
     sheet_index = 1
-    # Đọc sheet từ file Excel
-    df = pd.read_excel(i, sheet_name=sheet_index, header=2)
+    df = pd.read_excel(pathFile, sheet_name=sheet_index, header=2)
     df['Mã đơn hàng'] = df['Mã đơn hàng'].astype(str)
     df['Khuyến mãi / Trả thưởng'].fillna(0, inplace=True)
-    v = ['Mã đơn hàng', 'Mã sản phẩm', 'Khuyến mãi / Trả thưởng']
-    df = df[v]
+    df = df.drop(df[(df['Đơn giá'] == 0) | (df['Đơn giá'] == 1000) | (df['Đơn giá'] == 1)].index)
+    df = df.iloc[:,:12]
+    df = df.dropna()
+    return df
 
-    # Lọc ra các hàng có 'Khuyến mãi / Trả thưởng' = 0
-    df_filtered = df[df['Khuyến mãi / Trả thưởng'] == 0]
-    df_filtered.dropna(inplace=True)
-    # In ra dữ liệu đã lọc
-    data = df_filtered.iloc[:, [0, 1]]
 
-    grouped = data.groupby('Mã đơn hàng')['Mã sản phẩm'].agg(list).reset_index()
+df1 = readFile('../data/MỸ-KHỞI-TK-MÌ-CAO-CẤP-KM-T1.2023.xlsb')
+df2 = readFile('../data/MỸ-KHỞI-TỔNG-KẾT-MÌ-ZEPPIN-GÓI-MÌ-LY-ZEPPIN-T2.2023.xlsb')
+df3 = readFile('../data/MỸ-KHỞI-BG-TK-PHỞ-ĐỆ-NHẤT-T3.2023.xlsb')
+df4 = readFile('../data/MỸ-KHỞI-FORM-TK-PHỞ-ĐỆ-NHẤT-HỦ-TIẾU-KM-T4.2023.xlsb')
 
-    # Chuyển DataFrame thành danh sách các bản ghi dạng dict
-    data_records = grouped.to_dict(orient='records')
+# Gộp dữ liệu từ 4 file
+merged_df = pd.concat([df1, df2, df3, df4], axis=0)
+eng_name = ['OrderID', 'ProductID', 'ProductName', 'Type', 'DeliveryDate', 'SalesAgent', 'CustomerID','CustomerName','QuantityOrder', 'QuantityDelivery','Price', 'TotalPrice']
+merged_df.columns = eng_name
+merged_df['TotalPrice'] = merged_df['QuantityDelivery'] * merged_df['Price']
+
+
+# Đẩy dữ liệu lên MongoDB
+def postDataToMGBD(data, collection):
+    data_records = data.to_dict(orient='records')
 
     # Chèn dữ liệu vào MongoDB
     collection.insert_many(data_records)
 
-print("Dữ liệu đã được đẩy vào MongoDB.")
-
-
+try:
+    postDataToMGBD(merged_df, collect)
+    print('Data posted')
+except:
+    print('cannot post data')

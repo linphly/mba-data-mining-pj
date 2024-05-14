@@ -4,7 +4,7 @@ from pymongo import MongoClient
 
 client = MongoClient('mongodb://localhost:27017/')
 mydb = client['customer_data']
-collection = mydb['marketBasket']
+collection = mydb['general_data']
 
 mydb.drop_collection(collection)
 print('collection deleted')
