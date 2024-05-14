@@ -46,8 +46,11 @@ def postDataToMGBD(data, collection):
     # Chèn dữ liệu vào MongoDB
     collection.insert_many(data_records)
 
-try:
-    postDataToMGBD(merged_df, collect)
-    print('Data posted')
-except:
-    print('cannot post data')
+
+if __name__ == '__main__':
+
+    try:
+        postDataToMGBD(merged_df, collect)
+        print('Data posted')
+    except:
+        print('cannot post data')

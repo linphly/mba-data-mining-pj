@@ -32,5 +32,6 @@ def view_basket():
     print(grouped)
 
 
-view_general()
-# view_basket()
+if __name__ == '__main__':
+    view_general()
+    # view_basket()
