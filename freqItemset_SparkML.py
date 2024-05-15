@@ -1,3 +1,7 @@
+'''
+Tìm tập phổ biến sử dụng thư viện spark ml
+'''
+
 import pandas as pd
 from pyspark.sql import SparkSession
 from pymongo import MongoClient

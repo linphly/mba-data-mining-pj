@@ -1,3 +1,8 @@
+'''
+Sinh luật kết hợp từ frequent itemset
+Lưu các luật ra file csv dưới dạng: 'Antecedents', 'Consequents', 'Confidence'
+'''
+
 from itertools import chain, combinations
 from freqItemset_FPGrowth import getItemsets
 import csv

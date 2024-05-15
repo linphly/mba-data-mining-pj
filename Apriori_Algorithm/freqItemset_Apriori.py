@@ -1,4 +1,3 @@
-"""this file is to upload data to mongoDB"""
 import time
 
 import pandas as pd
