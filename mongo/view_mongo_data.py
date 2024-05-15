@@ -33,5 +33,5 @@ def view_basket():
 
 
 if __name__ == '__main__':
-    view_general()
-    # view_basket()
+    # view_general()
+    view_basket()

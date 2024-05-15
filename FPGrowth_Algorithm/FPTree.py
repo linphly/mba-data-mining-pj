@@ -5,14 +5,14 @@ def find_frequent_itemsets(transactions, minimum_support, include_support=False)
 
     items = defaultdict(lambda: 0)
 
-    total_transactions = len(transactions)
+    # total_transactions = len(transactions)
 
     for transaction in transactions:
         for item in transaction:
             items[item] += 1
 
-    items = dict((item, support/total_transactions) for item, support in items.items()
-        if support/total_transactions >= minimum_support)
+    items = dict((item, support) for item, support in items.items()
+        if support >= minimum_support)
 
     def clean_transaction(transaction):
         transaction = filter(lambda v: v in items, transaction)
@@ -28,7 +28,7 @@ def find_frequent_itemsets(transactions, minimum_support, include_support=False)
 
     def find_with_suffix(tree, suffix):
         for item, nodes in tree.items():
-            support = sum(n.count for n in nodes) / total_transactions
+            support = sum(n.count for n in nodes)
             if support >= minimum_support and item not in suffix:
 
                 found_set = [item] + suffix
