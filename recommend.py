@@ -3,7 +3,7 @@ import json
 
 
 # Đọc dữ liệu từ tệp CSV vào DataFrame
-rules = pd.read_csv('asociation_rules.csv', dtype = str)
+rules = pd.read_csv('association_rules.csv', dtype = str)
 
 # Lấy danh sách tất cả mặt hàng
 product_catalog = []

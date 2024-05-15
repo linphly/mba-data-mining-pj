@@ -1,5 +1,5 @@
 from itertools import chain, combinations
-from freqItemset_FPGrowth import getItemsets
+from freqItemset_Apriori import apriori_from_scratch
 import csv
 
 
@@ -38,7 +38,7 @@ def frequent_itemset_support(frequent_itemsets, itemset):
 
 if __name__ == '__main__':
     # lấy ra các tập phổ biến
-    frequent_itemsets = getItemsets(minimum_support=0.01, include_support=True)
+    frequent_itemsets = apriori_from_scratch(sp=0.01)
 
     # tính toán các luật kết hợp
     min_confidence = 0.6

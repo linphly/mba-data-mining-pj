@@ -5,6 +5,7 @@ from pymongo import MongoClient
 import warnings
 warnings.filterwarnings('ignore')
 pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
 
 # Kết nối tới MongoDB
 client = MongoClient('mongodb://localhost:27017/')

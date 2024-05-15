@@ -16,11 +16,10 @@ def getDataFromMGDB(collectName, colName):
     dataFrame = pd.DataFrame(data).drop(columns='_id')
     return dataFrame
 
-colName = ['OrderID', 'ProductID'] # Thay đổi các cột muốn lấy ở đây
+colName = ['ProductID', 'QuantityDelivery']
 data = getDataFromMGDB(collect, colName)
 
-print(data.head(10))
-
-
+quantity_data = data.groupby('ProductID')['QuantityDelivery'].count()
+print(quantity_data)
 
 

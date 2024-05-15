@@ -1,3 +1,6 @@
+"""this file is to upload data to mongoDB"""
+import time
+
 import pandas as pd
 from pymongo import MongoClient
 import warnings
@@ -22,29 +25,24 @@ def getDataFromMGDB(collectName, colName):
     return dataFrame
 
 
-colName = ['OrderID', 'ProductID']
-data = getDataFromMGDB(collection, colName).drop(columns='_id')
+colName = ['OrderID', 'ProductID']  # Thay đổi các cột muốn lấy ở đây
+data = getDataFromMGDB(collection, colName)
 transactions = data.groupby('OrderID')['ProductID'].agg(list).reset_index()
 
 
 # Xây dựng thuật toán apriori
-def getItemsets(transactions = transactions, minimum_support = 0):
+def apriori_from_scratch(transactions = transactions, sp = 0):
     init = set()
     for transaction in transactions['ProductID']:
         init.update(transaction)
     init = np.array(list(init))
-
-    sp = minimum_support
     s = int(sp * len(transactions))
-    n = len(transactions)
-    # print(s, n)
-
-    itemsets = []
+    n=len(transactions)
 
     c = Counter()
     for i in init:
         for d in transactions['ProductID']:
-            if (i in d[1:]):
+            if (i in d):
                 c[i] += 1
 
     l = Counter()
@@ -52,11 +50,12 @@ def getItemsets(transactions = transactions, minimum_support = 0):
         if (c[i] >= s):
             l[frozenset([i])] += c[i]
 
-    for i in l:
-        itemsets.append((list(i), l[i]/n))
-
     pl = l
     pos = 1
+    L = []
+    for itemset, support in pl.items():
+        L.append((list(itemset), support/n))
+
     for count in range(2, 1000):
         nc = set()
         temp = list(l)
@@ -70,7 +69,7 @@ def getItemsets(transactions = transactions, minimum_support = 0):
         for i in nc:
             c[i] = 0
             for q in transactions['ProductID']:
-                temp = set(q[1:])
+                temp = set(q)
                 if (i.issubset(temp)):
                     c[i] += 1
 
@@ -79,25 +78,30 @@ def getItemsets(transactions = transactions, minimum_support = 0):
             if (c[i] >= s):
                 l[i] += c[i]
 
-        for i in l:
-            itemsets.append((list(i), l[i] / n))
-
         if (len(l) == 0):
             break
         pl = l
         pos = count
-    print("Result: ")
-    print("L" + str(pos) + ":")
-    for i in pl:
-        print(str(list(i)) + ": " + str(pl[i]))
-    print()
 
-    itemsets = sorted(itemsets, key=lambda i: i[1], reverse=True)   # xắp xếp theo support giảm dần
-    return itemsets
+        for itemset,support in pl.items():
+            L.append((list(itemset),support/n))
+
+    L = sorted(L, key=lambda i: i[1], reverse=True)   # xắp xếp theo support giảm dần
+    return L
+    # return pd.DataFrame(L, columns=['Itemset', 'Support'])
 
 
 if __name__ == '__main__':
-    freq_itemsets = getItemsets(minimum_support=0.015)
+    start = time.time()
 
-    for itemset, support in freq_itemsets[:10]:
+    # Lấy ra frequent itemset
+    freq_itemsets = apriori_from_scratch(transactions, 0.01)
+
+    print(len(freq_itemsets))
+    for itemset, support in freq_itemsets:
         print(str(itemset) + ' ' + str(support))
+
+    end = time.time()
+    print('Thời gian chạy', str(end - start))
+
+

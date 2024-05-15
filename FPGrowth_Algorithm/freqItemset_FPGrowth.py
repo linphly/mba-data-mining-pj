@@ -30,13 +30,13 @@ def getItemsets(transactions = transactions, minimum_support = 0, include_suppor
 
 
 if __name__ == '__main__':
-    # Lấy ra frequent itemset
     start = time.time()
 
+    # Lấy ra frequent itemset
     freq_itemsets = getItemsets(minimum_support=0.01, include_support=True)
-    # print(type(freq_itemsets))
-    # print(freq_itemsets)
-    for itemset, support in freq_itemsets[:10]:
+
+    print(len(freq_itemsets))
+    for itemset, support in freq_itemsets:
         print(str(itemset) + ' ' + str(support))
 
     end = time.time()
