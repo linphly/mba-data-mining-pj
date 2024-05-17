@@ -94,7 +94,7 @@ if __name__ == '__main__':
     start = time.time()
 
     # Lấy ra frequent itemset
-    freq_itemsets = apriori_from_scratch(transactions, 0.01)
+    freq_itemsets = apriori_from_scratch(transactions, 0.2)
 
     print(len(freq_itemsets))
     for itemset, support in freq_itemsets:

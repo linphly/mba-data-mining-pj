@@ -96,6 +96,9 @@ class FPTree(object):
             yield node
             node = node.neighbor
 
+    def route(self):
+        return self._routes
+
     def prefix_paths(self, item):
 
         def collect_path(node):
@@ -227,7 +230,7 @@ class FPNode(object):
 
     @property
     def children(self):
-        return tuple(self._children.itervalues())
+        return tuple(self._children.values())
 
     def inspect(self, depth=0):
         #print(('  ' * depth) + repr(self))
