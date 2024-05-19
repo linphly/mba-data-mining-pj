@@ -7,4 +7,4 @@
     * association rule: get rules from frequent itemset
 * recommend: from rules
 
-
+note: edit path in read data files before running
