@@ -33,7 +33,7 @@ if __name__ == '__main__':
     start = time.time()
 
     # Lấy ra frequent itemset
-    freq_itemsets = getItemsets(minimum_support=0.2, include_support=True)
+    freq_itemsets = getItemsets(minimum_support=0.01, include_support=True)
 
     print(len(freq_itemsets))
     for itemset, support in freq_itemsets:

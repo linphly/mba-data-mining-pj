@@ -1,14 +1,10 @@
 # Market Basket Analysis - Data mining project
 
 ## **Flow**  
-* folder mongo  
+* folder mongo: upload and get data from MongoDB
 * folder algorithm   
-    * freqItemset   
-    * association rule  
-* recommend
+    * freqItemset: find frequent itemset
+    * association rule: get rules from frequent itemset
+* recommend: from rules
 
 
-## Fix error
-add this 2 rows to fix error in converting pandas dataframe to spark dataframe
->spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
->spark.conf.set("spark.sql.execution.arrow.pyspark.fallback.enabled", "true")

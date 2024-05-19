@@ -5,7 +5,6 @@ import FPTree
 from collections import defaultdict
 import pandas as pd
 from pymongo import MongoClient
-from networkx.drawing.nx_agraph import graphviz_layout
 
 
 def build_tree(trans, minimum_support):
@@ -78,13 +77,13 @@ def draw_fptree(tree, image_file = None, dpi = 300):
 
     pos = hierarchy_pos(G)
 
-    labels = {node: f"{node[0]}: {node[1]}" for node in G.nodes()}
+    labels = {node: f"({node[0]}: {node[1]})" for node in G.nodes()}
 
     plt.figure(figsize=(10,5))
 
     nx.draw(G, pos, with_labels=True, labels = labels, arrows=True,
             node_color=[G.nodes[node]['color'] for node in G.nodes()],
-            node_size=10, edge_color='orange', font_size=5)
+            node_size=10, edge_color='orange', font_size=6)
 
     if image_file != None:
         plt.savefig(image_file, dpi=dpi)
@@ -103,12 +102,12 @@ if __name__ == '__main__':
     colName = ['OrderID', 'ProductID']
     data = collect.find({}, colName)
     dataFrame = pd.DataFrame(data).drop(columns='_id')
-    dataFrame['ProductID'] = dataFrame['ProductID'].str[-4:]  # tên dài quá nên cắt bớt nhìn cho dễ
+    dataFrame['ProductID'] = dataFrame['ProductID'].str[-3:]
     grouped = dataFrame.groupby('OrderID')['ProductID'].agg(list).reset_index()
     transactions = grouped['ProductID']
 
 
-    minsup = 0.2
+    minsup = 0.25
 
     # Xây dựng cây FP-tree
     tree = build_tree(transactions, minsup)

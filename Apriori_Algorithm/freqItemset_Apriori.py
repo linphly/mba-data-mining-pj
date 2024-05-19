@@ -35,7 +35,7 @@ def apriori_from_scratch(transactions = transactions, sp = 0):
     for transaction in transactions['ProductID']:
         init.update(transaction)
     init = np.array(list(init))
-    s = int(sp * len(transactions))
+    s = sp
     n=len(transactions)
 
     c = Counter()
@@ -46,7 +46,7 @@ def apriori_from_scratch(transactions = transactions, sp = 0):
 
     l = Counter()
     for i in c:
-        if (c[i] >= s):
+        if (c[i]/n >= s):
             l[frozenset([i])] += c[i]
 
     pl = l
@@ -74,7 +74,7 @@ def apriori_from_scratch(transactions = transactions, sp = 0):
 
         l = Counter()
         for i in c:
-            if (c[i] >= s):
+            if (c[i]/n >= s):
                 l[i] += c[i]
 
         if (len(l) == 0):
@@ -94,7 +94,7 @@ if __name__ == '__main__':
     start = time.time()
 
     # Lấy ra frequent itemset
-    freq_itemsets = apriori_from_scratch(transactions, 0.2)
+    freq_itemsets = apriori_from_scratch(transactions, 0.01)
 
     print(len(freq_itemsets))
     for itemset, support in freq_itemsets:

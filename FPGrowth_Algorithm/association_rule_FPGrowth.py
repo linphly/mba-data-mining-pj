@@ -1,6 +1,6 @@
 '''
 Sinh luật kết hợp từ frequent itemset
-Lưu các luật ra file csv dưới dạng: 'Antecedents', 'Consequents', 'Confidence'
+Lưu các luật ra file csv dưới dạng: 'Antecedents', 'Consequences', 'Confidence'
 '''
 
 from itertools import chain, combinations
@@ -24,7 +24,7 @@ def generate_association_rules(frequent_itemsets, min_confidence):
                     association_rules.append((antecedent, consequent, confidence))
 
     association_rules = [(list(item[0]), list(item[1]), item[2]) for item in association_rules]
-
+    association_rules = sorted(association_rules, key=lambda i: i[2], reverse=True)   # xắp xếp theo support giảm dần
     return association_rules
 
 
@@ -46,8 +46,9 @@ if __name__ == '__main__':
     frequent_itemsets = getItemsets(minimum_support=0.01, include_support=True)
 
     # tính toán các luật kết hợp
-    min_confidence = 0.6
+    min_confidence = 0.01
     rules = generate_association_rules(frequent_itemsets, min_confidence)
+
     print(len(rules))
 
     # ghi ra file
@@ -59,7 +60,6 @@ if __name__ == '__main__':
 
     # in ra
     for rule in rules:
-        print(rule)
         print(rule[0], '-->', rule[1], 'confidence:', rule[2])
 
 

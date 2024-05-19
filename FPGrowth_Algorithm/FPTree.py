@@ -233,7 +233,6 @@ class FPNode(object):
         return tuple(self._children.values())
 
     def inspect(self, depth=0):
-        #print(('  ' * depth) + repr(self))
         for child in self.children:
             child.inspect(depth + 1)
 
